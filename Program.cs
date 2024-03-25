@@ -3,7 +3,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        Store store = new("Tamimi");
+        Store store = new("Tamimi",500);
+        Console.WriteLine(store.GetCapacity());
+        
 
         var waterBottle = new Item("Water Bottle", 10, new DateTime(2023, 1, 1));
         var chocolateBar = new Item("Chocolate Bar", 15, new DateTime(2023, 2, 1));
@@ -20,7 +22,6 @@ internal class Program
         var batteries = new Item("Batteries", 10);
         var umbrella = new Item("Umbrella", 5);
 
-
         List<Item> items = store.GetItems();
 
         Console.WriteLine("=======================================");
@@ -29,11 +30,14 @@ internal class Program
         store.AddItem(waterBottle);
         store.AddItem(chocolateBar);
         store.AddItem(tissuePack);
+        store.AddItem(notebook);
+        store.AddItem(pen);
         store.AddItem(coffee);
         store.AddItem(coffee);
 
         Console.WriteLine("=======================================");
 
+        Console.WriteLine(store.GetCapacity());
         store.RemoveItems(waterBottle);
 
         Console.WriteLine("=======================================");
@@ -47,10 +51,12 @@ internal class Program
         store.SortByNameAsc();
         
         Console.WriteLine("=======================================");
+        Console.WriteLine("=======================================");
         
         foreach (Item item in items)
         {
-            Console.WriteLine($"Name = {item.GetName()}, Quantity = {item.GetQuantity()}, CreatedDate = {item.GetCreatedDate()}");
+            Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()},\nCreatedDate = {item.GetCreatedDate()}");
+            Console.WriteLine("---------------------------------------");
 
         }
 
