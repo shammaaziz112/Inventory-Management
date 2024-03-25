@@ -30,6 +30,8 @@ internal class Program
         // store.RemoveItems(waterBottle);
 
         Console.WriteLine(store.GetCurrentVolume());
+        store.FindItemByName("Coffee");
+        store.FindItemByName("Coff");
 
         foreach (Item item in items)
         {

@@ -36,9 +36,25 @@ namespace inventory_management.src
             _items.Remove(item);
             return true;
         }
-        public string GetCurrentVolume(){
+        public string GetCurrentVolume()
+        {
 
             return $"The total amount of items in the {_name} store {_items.Count}";
+        }
+
+        public bool FindItemByName(string itemName)
+        {
+            foreach (var item in _items)
+            {
+                if (item.GetName() == itemName)
+                {
+                    Console.WriteLine($"{itemName} Item founded: Quantity = {item.GetQuantity()}, CreatedDate = {item.GetCreatedDate()}");
+                    return true;
+                }
+            }
+            Console.WriteLine($"{itemName} Item not founded");
+
+            return false;
         }
     }
 }
