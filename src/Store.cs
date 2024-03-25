@@ -11,23 +11,28 @@ namespace inventory_management.src
             _items = [];
         }
 
-        public List<Item> GetItems(){
+        public List<Item> GetItems()
+        {
             return _items;
-            
+
         }
-        public bool AddItem(Item newItem){
-            _items.Add(newItem);
-            return true;
-        }
-        public bool AddItems(Item[] newItem){
-            foreach (var item in newItem)
+        public bool AddItem(Item newItem)
+        {
+            bool findItem = _items.Contains(newItem);
+
+            if (findItem)
             {
-                _items.Add(item);
+                Console.WriteLine($"{newItem.GetName()} item already added");
+
+                return false;
             }
-            
+
+            _items.Add(newItem);
+            Console.WriteLine($"Added {newItem.GetName()} item successful");
             return true;
         }
-        public bool RemoveItems(Item item){
+        public bool RemoveItems(Item item)
+        {
             _items.Remove(item);
             return true;
         }

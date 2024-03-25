@@ -24,12 +24,11 @@ internal class Program
         List<Item> items = store.GetItems();
         Console.WriteLine("Count Before " + items.Count);
 
-        store.AddItems([waterBottle, chocolateBar, notebook, pen, tissuePack, chipsBag,
-                        sodaCan, soap, shampoo, toothbrush, sandwich, batteries, umbrella]);
         store.AddItem(new Item("Sunscreen", 8));
         store.AddItem(coffee);
+        store.AddItem(coffee);
 
-        store.RemoveItems(waterBottle);
+        // store.RemoveItems(waterBottle);
 
         Console.WriteLine("Count After " + items.Count);
 
