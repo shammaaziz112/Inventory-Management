@@ -22,7 +22,6 @@ internal class Program
 
 
         List<Item> items = store.GetItems();
-        Console.WriteLine("Count Before " + items.Count);
 
         store.AddItem(new Item("Sunscreen", 8));
         store.AddItem(coffee);
@@ -30,7 +29,7 @@ internal class Program
 
         // store.RemoveItems(waterBottle);
 
-        Console.WriteLine("Count After " + items.Count);
+        Console.WriteLine(store.GetCurrentVolume());
 
         foreach (Item item in items)
         {

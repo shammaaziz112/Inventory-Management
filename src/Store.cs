@@ -36,5 +36,9 @@ namespace inventory_management.src
             _items.Remove(item);
             return true;
         }
+        public string GetCurrentVolume(){
+
+            return $"The total amount of items in the {_name} store {_items.Count}";
+        }
     }
 }
