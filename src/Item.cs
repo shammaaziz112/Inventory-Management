@@ -9,16 +9,16 @@ namespace inventory_management.src
 
         public Item(string name, int quantity)
         {
+            if (quantity < 0)throw new ArgumentException("Quantity cannot be negative.");
             _name = name;
-            if (quantity >= 0) { _quantity = quantity; }
-            else { _quantity = 0; }
+            _quantity = quantity;
             _createdDate = DateTime.Now;
         }
         public Item(string name, int quantity, DateTime createdDate)
         {
+            if (quantity <= 0)throw new ArgumentException("Quantity cannot be negative.");
             _name = name;
-            if (quantity >= 0) { _quantity = quantity; }
-            else { _quantity = 0; }
+            _quantity = quantity;
             _createdDate = createdDate;
         }
 

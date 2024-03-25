@@ -23,20 +23,37 @@ internal class Program
 
         List<Item> items = store.GetItems();
 
+        Console.WriteLine("=======================================");
+
         store.AddItem(new Item("Sunscreen", 8));
+        store.AddItem(waterBottle);
+        store.AddItem(chocolateBar);
+        store.AddItem(tissuePack);
         store.AddItem(coffee);
         store.AddItem(coffee);
 
-        // store.RemoveItems(waterBottle);
+        Console.WriteLine("=======================================");
+
+        store.RemoveItems(waterBottle);
+
+        Console.WriteLine("=======================================");
 
         Console.WriteLine(store.GetCurrentVolume());
+
+        Console.WriteLine("=======================================");
+
         store.FindItemByName("Coffee");
         store.FindItemByName("Coff");
-
+        store.SortByNameAsc();
+        
+        Console.WriteLine("=======================================");
+        
         foreach (Item item in items)
         {
             Console.WriteLine($"Name = {item.GetName()}, Quantity = {item.GetQuantity()}, CreatedDate = {item.GetCreatedDate()}");
 
         }
+
+        Console.WriteLine("=======================================");
     }
 }

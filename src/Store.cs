@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace inventory_management.src
 {
     public class Store
@@ -34,6 +36,7 @@ namespace inventory_management.src
         public bool RemoveItems(Item item)
         {
             _items.Remove(item);
+            Console.WriteLine($"Removed {item.GetName()} item successful");
             return true;
         }
         public string GetCurrentVolume()
@@ -44,17 +47,22 @@ namespace inventory_management.src
 
         public bool FindItemByName(string itemName)
         {
-            foreach (var item in _items)
-            {
-                if (item.GetName() == itemName)
+            var findItem = _items.Find(item => item.GetName()==itemName);
+
+                if (findItem is not null)
                 {
-                    Console.WriteLine($"{itemName} Item founded: Quantity = {item.GetQuantity()}, CreatedDate = {item.GetCreatedDate()}");
+                    Console.WriteLine($"{itemName} Item founded: Quantity = {findItem.GetQuantity()}, CreatedDate = {findItem.GetCreatedDate()}");
                     return true;
                 }
-            }
+            
             Console.WriteLine($"{itemName} Item not founded");
-
             return false;
+        }
+
+        public List<Item> SortByNameAsc(){
+            _items.Sort((item1, item2) => item1.GetName().CompareTo(item2.GetName()));
+            return _items;
+
         }
     }
 }
