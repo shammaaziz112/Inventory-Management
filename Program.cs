@@ -16,7 +16,7 @@ internal class Program
         var sodaCan = new Item("Soda Can", 8, new DateTime(2023, 7, 1));
         var soap = new Item("Soap", 12, new DateTime(2023, 8, 1));
         var shampoo = new Item("Shampoo", 40, new DateTime(2023, 9, 1));
-        var toothbrush = new Item("Toothbrush", 50, new DateTime(2023, 10, 1));
+        var toothbrush = new Item("Toothbrush", 50, new DateTime(2024, 1, 1));
         var coffee = new Item("Coffee", 20, default);
         var sandwich = new Item("Sandwich", 15, default);
         var batteries = new Item("Batteries", 10, default);
@@ -31,7 +31,7 @@ internal class Program
         store.AddItem(notebook);
         store.AddItem(pen);
         store.AddItem(coffee);
-        store.AddItem(coffee);
+        store.AddItem(toothbrush);
 
         Console.WriteLine("=======================================");
         Console.WriteLine("=======================================");
@@ -64,5 +64,8 @@ internal class Program
         store.DisplayList(sortedItemByDate);
 
         Console.WriteLine("=======================================");
+        Console.WriteLine("* Group By Date *");
+        
+        store.GroupByDate();
     }
 }

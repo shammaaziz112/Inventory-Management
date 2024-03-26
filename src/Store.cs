@@ -1,4 +1,6 @@
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace inventory_management.src
 {
@@ -103,20 +105,39 @@ namespace inventory_management.src
         public List<T> SortByDate(SortOrder order)
         {
             if (order is SortOrder.DESC)
-        {
-            var descSort = from item in _items
-                           orderby item.GetCreatedDate() descending
-                           select item;
-            return descSort.ToList();
+            {
+                var descSort = from item in _items
+                               orderby item.GetCreatedDate() descending
+                               select item;
+                return descSort.ToList();
+            }
+            if (order is SortOrder.ASC)
+            {
+                var ascSort = from item in _items
+                              orderby item.GetCreatedDate()
+                              select item;
+                return ascSort.ToList();
+            }
+            return _items;
         }
-        else
+        public void GroupByDate()
         {
-            var ascSort = from item in _items
-                          orderby item.GetCreatedDate()
-                          select item;
-            return ascSort.ToList();
-        }
+            var groupByMonth = (from item in _items
+                                let category = (DateTime.Now - item.GetCreatedDate()).TotalDays <= 90 ? "New Arrival" : "Old"
+                                group item by category into newGroup
+                                orderby newGroup.Key
+                                select newGroup);
 
+            foreach (var monthGroup in groupByMonth)
+            {
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine($"{monthGroup.Key} Items: ");
+                Console.WriteLine("---------------------------------------");
+                foreach (var item in monthGroup)
+                {
+                    Console.WriteLine($" - {item.GetName()},\n Created: {item.GetCreatedDate()}");
+                }
+            }
         }
 
         //* Display the List
