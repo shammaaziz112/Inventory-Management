@@ -56,12 +56,13 @@ internal class Program
 
         store.GetItems();
 
-        List<Item> sortedItem = store.SortByNameAsc();
+        Console.WriteLine("=======================================");
 
-        foreach (var item in sortedItem)
-        {
-            Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()}\nCreated Date = {item.GetCreatedDate()}");
-        }
+        List<Item> sortedItemByDate = store.SortByDate(SortOrder.DESC);
+        Console.WriteLine("* Sorted Item By Date *");
+        
+        store.DisplayList(sortedItemByDate);
+
         Console.WriteLine("=======================================");
     }
 }

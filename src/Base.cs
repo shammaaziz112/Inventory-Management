@@ -8,7 +8,7 @@ namespace inventory_management.src
         public Base(DateTime createdDate = default)
         {
             _id = DateTime.Now.Microsecond;
-            _createdDate = createdDate == default? DateTime.Now: createdDate;
+            _createdDate = createdDate == default ? DateTime.Now : createdDate;
         }
 
         public DateTime GetCreatedDate()
@@ -16,8 +16,9 @@ namespace inventory_management.src
             return _createdDate;
         }
 
-        public int GetId(){
+        public int GetId()
+        {
             return _id;
         }
-    }  
+    }
 }

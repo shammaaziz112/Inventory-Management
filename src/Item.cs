@@ -1,11 +1,10 @@
 
 namespace inventory_management.src
 {
-    public class Item : Base
+    public class Item : Base, IBase
     {
         private readonly string _name;
         private readonly int _quantity;
-        // private readonly DateTime _createdDate;
 
         public Item(string name, int quantity, DateTime createdDate) : base(createdDate)
         {

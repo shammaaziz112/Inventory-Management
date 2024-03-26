@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace inventory_management.src
 {
-    public class Store<T> where T : Item
+    public class Store<T> where T : Base, IBase
     {
         private readonly string _name;
         private readonly int _capacity;
@@ -27,6 +27,7 @@ namespace inventory_management.src
                 Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()},\nCreated Date = {item.GetCreatedDate()}");
                 Console.WriteLine("---------------------------------------");
             }
+
         }
         public string GetCapacity()
         {
@@ -41,7 +42,6 @@ namespace inventory_management.src
             if (findItem is not null)
             {
                 Console.WriteLine($"{newItem.GetName()} item already added");
-
                 return false;
             }
 
@@ -64,7 +64,7 @@ namespace inventory_management.src
             return true;
         }
 
-        //* Get Current Volume
+        //* Get Current Amount of the Items
         public int GetCurrentVolume()
         {
             return _items.Sum(item => item.GetQuantity());
@@ -86,9 +86,47 @@ namespace inventory_management.src
         }
 
         //* Sort By Name Asc.
-        public List<T> SortByNameAsc()
+        public List<T> SortByNameAsc(SortOrder order)
         {
-            return _items.OrderBy(item => item.GetName()).ToList();
+            if (order == SortOrder.ASC)
+            {
+                return _items.OrderBy(item => item.GetName()).ToList();
+            }
+            if (order == SortOrder.DESC)
+            {
+                return _items.OrderByDescending(item => item.GetName()).ToList();
+            }
+            return _items;
+        }
+
+        //*Sort By Date
+        public List<T> SortByDate(SortOrder order)
+        {
+            if (order is SortOrder.DESC)
+        {
+            var descSort = from item in _items
+                           orderby item.GetCreatedDate() descending
+                           select item;
+            return descSort.ToList();
+        }
+        else
+        {
+            var ascSort = from item in _items
+                          orderby item.GetCreatedDate()
+                          select item;
+            return ascSort.ToList();
+        }
+
+        }
+
+        //* Display the List
+        public void DisplayList(List<T> list)
+        {
+            foreach (var item in list)
+            {
+                Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()}\nCreated Date = {item.GetCreatedDate()}");
+                Console.WriteLine("---------------------------------------");
+            }
         }
     }
 }
