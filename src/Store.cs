@@ -2,42 +2,50 @@ using System.Runtime.CompilerServices;
 
 namespace inventory_management.src
 {
-    public class Store
+    public class Store<T> where T : Item
     {
         private readonly string _name;
         private readonly int _capacity;
-        private int _amount;
-        private readonly List<Item> _items;
+        private readonly List<T> _items;
 
         public Store(string name, int capacity)
         {
             _name = name;
             _capacity = capacity;
-            _amount = 0;
             _items = [];
         }
 
-        public List<Item> GetItems()
+        //* Get Method
+        public string GetName()
         {
-            return _items;
+            return _name;
+        }
+        public void GetItems()
+        {
+            foreach (T item in _items)
+            {
+                Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()},\nCreated Date = {item.GetCreatedDate()}");
+                Console.WriteLine("---------------------------------------");
+            }
         }
         public string GetCapacity()
         {
-            return $"Capacity: {_amount}/{_capacity} inventory";
+            return $"Capacity: {GetCurrentVolume()}/{_capacity} inventory";
         }
-        public bool AddItem(Item newItem)
-        {
-            bool findItem = _items.Contains(newItem);
-            // int capacity = ;
 
-            if (findItem)
+        //* Add Item
+        public bool AddItem(T newItem)
+        {
+            var findItem = _items.Find(item => item.GetName() == newItem.GetName());
+
+            if (findItem is not null)
             {
                 Console.WriteLine($"{newItem.GetName()} item already added");
 
                 return false;
             }
 
-            if (_amount + newItem.GetQuantity() > _capacity)
+            if (GetCurrentVolume() + newItem.GetQuantity() >= _capacity)
             {
                 Console.WriteLine($"There no space to add {newItem.GetName()} item");
                 return false;
@@ -45,28 +53,31 @@ namespace inventory_management.src
 
             _items.Add(newItem);
             Console.WriteLine($"Added {newItem.GetName()} item successful");
-            _amount = _amount + newItem.GetQuantity();
             return true;
         }
-        public bool RemoveItems(Item item)
+
+        //* Remove Item
+        public bool RemoveItems(T item)
         {
             _items.Remove(item);
             Console.WriteLine($"Removed {item.GetName()} item successful");
             return true;
         }
-        public string GetCurrentVolume()
-        {
 
-            return $"The total amount of items in the {_name} store {_items.Count}";
+        //* Get Current Volume
+        public int GetCurrentVolume()
+        {
+            return _items.Sum(item => item.GetQuantity());
         }
 
+        //* Find Item By Name
         public bool FindItemByName(string itemName)
         {
             var findItem = _items.Find(item => item.GetName() == itemName);
 
             if (findItem is not null)
             {
-                Console.WriteLine($"{itemName} Item founded: Quantity = {findItem.GetQuantity()}, CreatedDate = {findItem.GetCreatedDate()}");
+                Console.WriteLine($"{itemName} Item founded: Quantity = {findItem.GetQuantity()}, Created Date = {findItem.GetCreatedDate()}");
                 return true;
             }
 
@@ -74,11 +85,10 @@ namespace inventory_management.src
             return false;
         }
 
-        public List<Item> SortByNameAsc()
+        //* Sort By Name Asc.
+        public List<T> SortByNameAsc()
         {
-            _items.Sort((item1, item2) => item1.GetName().CompareTo(item2.GetName()));
-            return _items;
-
+            return _items.OrderBy(item => item.GetName()).ToList();
         }
     }
 }
