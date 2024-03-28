@@ -1,14 +1,10 @@
-using System.ComponentModel.Design;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-
 namespace inventory_management.src
 {
-    public class Store<T> where T : Base, IBase
+    public class Store
     {
         private readonly string _name;
         private readonly int _capacity;
-        private readonly List<T> _items;
+        private readonly List<Item> _items;
 
         public Store(string name, int capacity)
         {
@@ -24,46 +20,59 @@ namespace inventory_management.src
         }
         public void GetItems()
         {
-            foreach (T item in _items)
+            foreach (Item item in _items)
             {
-                Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()},\nCreated Date = {item.GetCreatedDate()}");
-                Console.WriteLine("---------------------------------------");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"- Name = {item.GetName()},\n  Quantity = {item.GetQuantity()},\n  Created Date = {item.GetCreatedDate()}");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->");
             }
 
         }
         public string GetCapacity()
         {
-            return $"Capacity: {GetCurrentVolume()}/{_capacity} inventory";
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            return $"Capacity: {GetCurrentVolume()} out of {_capacity} units in inventory.";
         }
 
-        //* Add Item
-        public bool AddItem(T newItem)
-        {
-            var findItem = _items.Find(item => item.GetName() == newItem.GetName());
 
-            if (findItem is not null)
+        //* Add Item
+        public bool AddItem(Item newItem)
+        {
+            var existingItem = _items.Find(item => item.GetName() == newItem.GetName());
+
+            if (existingItem != null)
             {
-                Console.WriteLine($"{newItem.GetName()} item already added");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"The item '{newItem.GetName()}' is already in the inventory.");
                 return false;
             }
 
-            if (GetCurrentVolume() + newItem.GetQuantity() >= _capacity)
+            if (GetCurrentVolume() + newItem.GetQuantity() > _capacity)
             {
-                Console.WriteLine($"There no space to add {newItem.GetName()} item");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Unable to add '{newItem.GetName()}' due to insufficient space.");
                 return false;
             }
 
             _items.Add(newItem);
-            Console.WriteLine($"Added {newItem.GetName()} item successful");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"The item '{newItem.GetName()}' has been successfully added to the inventory.");
             return true;
         }
 
         //* Remove Item
-        public bool RemoveItems(T item)
+        public bool RemoveItem(Item item)
         {
-            _items.Remove(item);
-            Console.WriteLine($"Removed {item.GetName()} item successful");
-            return true;
+            if (_items.Remove(item))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"The item '{item.GetName()}' has been successfully removed from the inventory.");
+                return true;
+            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"The item '{item.GetName()}' was not found in the inventory.");
+            return false;
         }
 
         //* Get Current Amount of the Items
@@ -75,20 +84,21 @@ namespace inventory_management.src
         //* Find Item By Name
         public bool FindItemByName(string itemName)
         {
-            var findItem = _items.Find(item => item.GetName() == itemName);
+            var foundItem = _items.Find(item => item.GetName() == itemName);
 
-            if (findItem is not null)
+            if (foundItem != null)
             {
-                Console.WriteLine($"{itemName} Item founded: Quantity = {findItem.GetQuantity()}, Created Date = {findItem.GetCreatedDate()}");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"The item '{itemName}' was found: Quantity = {foundItem.GetQuantity()}, Created Date = {foundItem.GetCreatedDate()}");
                 return true;
             }
-
-            Console.WriteLine($"{itemName} Item not founded");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"The item '{itemName}' was not found in the inventory.");
             return false;
         }
 
         //* Sort By Name Asc.
-        public List<T> SortByNameAsc(SortOrder order)
+        public List<Item> SortByNameAsc(SortOrder order)
         {
             if (order == SortOrder.ASC)
             {
@@ -102,7 +112,7 @@ namespace inventory_management.src
         }
 
         //*Sort By Date
-        public List<T> SortByDate(SortOrder order)
+        public List<Item> SortByDate(SortOrder order)
         {
             if (order is SortOrder.DESC)
             {
@@ -122,31 +132,37 @@ namespace inventory_management.src
         }
         public void GroupByDate()
         {
-            var groupByMonth = (from item in _items
-                                let category = (DateTime.Now - item.GetCreatedDate()).TotalDays <= 90 ? "New Arrival" : "Old"
-                                group item by category into newGroup
-                                orderby newGroup.Key
-                                select newGroup);
+            var groupByMonth = from item in _items
+                               let category = (DateTime.Now - item.GetCreatedDate()).TotalDays <= 90 ? "New Arrival" : "Old"
+                               group item by category into newGroup
+                               orderby newGroup.Key
+                               select newGroup;
 
             foreach (var monthGroup in groupByMonth)
             {
-                Console.WriteLine("---------------------------------------");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->");
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"{monthGroup.Key} Items: ");
-                Console.WriteLine("---------------------------------------");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->");
                 foreach (var item in monthGroup)
                 {
-                    Console.WriteLine($" - {item.GetName()},\n Created: {item.GetCreatedDate()}");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($" - {item.GetName()}, Created: {item.GetCreatedDate().ToShortDateString()}");
                 }
             }
         }
 
         //* Display the List
-        public void DisplayList(List<T> list)
+        public void DisplayList(List<Item> list)
         {
             foreach (var item in list)
             {
-                Console.WriteLine($"Name = {item.GetName()},\nQuantity = {item.GetQuantity()}\nCreated Date = {item.GetCreatedDate()}");
-                Console.WriteLine("---------------------------------------");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"- Name = {item.GetName()},\n  Quantity = {item.GetQuantity()}\n  Created Date = {item.GetCreatedDate()}");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->");
             }
         }
     }

@@ -1,12 +1,17 @@
 ﻿using inventory_management.src;
 internal class Program
 {
+    // ** PrintDivider **
+    static void PrintDivider()
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(">< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><");
+    }
     private static void Main(string[] args)
     {
-        Store<Item> store = new("Tamimi", 500);
-        Console.WriteLine(store.GetCapacity());
+        Store store = new("Tamimi", 500);
 
-
+        
         var waterBottle = new Item("Water Bottle", 10, new DateTime(2023, 1, 1));
         var chocolateBar = new Item("Chocolate Bar", 15, new DateTime(2023, 2, 1));
         var notebook = new Item("Notebook", 5, new DateTime(2023, 3, 1));
@@ -17,14 +22,17 @@ internal class Program
         var soap = new Item("Soap", 12, new DateTime(2023, 8, 1));
         var shampoo = new Item("Shampoo", 40, new DateTime(2023, 9, 1));
         var toothbrush = new Item("Toothbrush", 50, new DateTime(2024, 1, 1));
-        var coffee = new Item("Coffee", 20, default);
-        var sandwich = new Item("Sandwich", 15, default);
-        var batteries = new Item("Batteries", 10, default);
-        var umbrella = new Item("Umbrella", 5, default);
+        var coffee = new Item("Coffee", 20);
+        var sandwich = new Item("Sandwich", 15);
+        var batteries = new Item("Batteries", 10);
+        var umbrella = new Item("Umbrella", 5);
+        var sunscreen = new Item("Sunscreen", 8);
 
-        Console.WriteLine("=======================================");
+        PrintDivider();
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine("* Add Item *");
 
-        store.AddItem(new Item("Sunscreen", 8, default));
+        store.AddItem(sunscreen);
         store.AddItem(waterBottle);
         store.AddItem(chocolateBar);
         store.AddItem(tissuePack);
@@ -32,40 +40,55 @@ internal class Program
         store.AddItem(pen);
         store.AddItem(coffee);
         store.AddItem(toothbrush);
+        store.AddItem(chipsBag);
+        store.AddItem(sodaCan);
+        store.AddItem(soap);
+        store.AddItem(shampoo);
+        store.AddItem(sandwich);
+        store.AddItem(batteries);
+        store.AddItem(umbrella);
 
-        Console.WriteLine("=======================================");
-        Console.WriteLine("=======================================");
+        PrintDivider();
 
         Console.WriteLine(store.GetCapacity());
 
-        Console.WriteLine("=======================================");
+        PrintDivider();
 
-        store.RemoveItems(waterBottle);
+        store.RemoveItem(waterBottle);
 
-        Console.WriteLine("=======================================");
+        PrintDivider();
+
+        // Console.ForegroundColor = ConsoleColor.DarkYellow;
 
         Console.WriteLine($"The total amount of items in the {store.GetName()} store {store.GetCurrentVolume()}");
 
-        Console.WriteLine("=======================================");
+        PrintDivider();
+
+        // Console.ForegroundColor = ConsoleColor.Green;
 
         store.FindItemByName("Coffee");
         store.FindItemByName("Coff");
 
-        Console.WriteLine("=======================================");
-        Console.WriteLine("=======================================");
+        PrintDivider();
+
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine("* Display Items *");
 
         store.GetItems();
 
-        Console.WriteLine("=======================================");
+        PrintDivider();
 
         List<Item> sortedItemByDate = store.SortByDate(SortOrder.DESC);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine("* Sorted Item By Date *");
-        
+
         store.DisplayList(sortedItemByDate);
 
-        Console.WriteLine("=======================================");
-        Console.WriteLine("* Group By Date *");
+        PrintDivider();
         
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine("* Group By Date *");
+
         store.GroupByDate();
     }
 }
